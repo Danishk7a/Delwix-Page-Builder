@@ -166,6 +166,9 @@ const BoxShadow = (e)=>{
 const [shouldLoadScene, setShouldLoadScene] = useState(false);
 const iframeContainerRef = useRef(null);
 
+
+
+
 const generateHtmlContent = useCallback(() => {
   return `
     <!DOCTYPE html>
@@ -205,14 +208,17 @@ const generateHtmlContent = useCallback(() => {
 
         // Set up the scene
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xffffff);
+
+ 
+          scene.background = new THREE.Color(0x511499);
 
         // Set up the camera
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.z = 5;
 
         // Set up the renderer
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new THREE.WebGLRenderer({ antialias: true ,   alpha: true });
+        renderer.setClearColor(0x000000, 0);
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
@@ -222,10 +228,10 @@ const generateHtmlContent = useCallback(() => {
         controls.dampingFactor = 0.05;
 
         // Create a torus knot
-        const geometry = new THREE.TorusKnotGeometry(0.5, 0.15, 100, 16);
-        const material = new THREE.MeshStandardMaterial({ color: 0x00ff00, metalness: 0.5, roughness: 0.5 });
-        const torusKnot = new THREE.Mesh(geometry, material);
-        scene.add(torusKnot);
+        // const geometry = new THREE.TorusKnotGeometry(0.5, 0.15, 100, 16);
+        // const material = new THREE.MeshStandardMaterial({ color: 0x00ff00, metalness: 0.5, roughness: 0.5 });
+        // const torusKnot = new THREE.Mesh(geometry, material);
+        // scene.add(torusKnot);
 
         let car;
         const loader = new GLTFLoader();
@@ -243,10 +249,10 @@ const generateHtmlContent = useCallback(() => {
         });
 
         // Add lights
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 4);
         scene.add(ambientLight);
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 11);
         directionalLight.position.set(5, 10, 7.5);
         scene.add(directionalLight);
 
@@ -288,6 +294,12 @@ useEffect(() => {
     iframe.style.height = '400px';
     iframe.style.border = 'none';
     iframe.title = '3D Scene';
+    iframe.style.backgroundColor = 'transparent';
+    iframe.id = `div-${uniqueID}`
+    setuniqueID((pre)=> pre +1);
+    iframe.className = 'clickable-div';
+    iframe.onclick = SelectDiv
+
 
     document.getElementById(currentSelectedDiv).appendChild(iframe);
 
@@ -307,6 +319,7 @@ useEffect(() => {
         <button onClick={addDiv}>AddDIV</button>
         <button onClick={deleteDiv}>Delete DIV</button>
         <button onClick={handleCreateIframe}>Add 3D</button>
+   
         {/* <IframeComponent /> */}
 
         <div style={{display:'flex', gap:'10px', alignItems:'center'}}> <span onClick={leftHorizontolly}>Left</span>  <span onClick={CenterHorizontolly}>Center</span> <span onClick={RightHorizontolly}>right</span></div>
