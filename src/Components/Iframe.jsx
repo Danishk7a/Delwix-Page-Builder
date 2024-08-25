@@ -3,6 +3,7 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 const IframeComponent = () => {
   const [shouldLoadScene, setShouldLoadScene] = useState(false);
   const iframeContainerRef = useRef(null);
+  const iframeRef = useRef(null);
 
   const generateHtmlContent = useCallback(() => {
     return `
@@ -15,7 +16,6 @@ const IframeComponent = () => {
         <style>
           body { 
             margin: 0; 
-            background-color: #f0f0f0; 
             overflow: hidden;
           }
           canvas { 
@@ -63,7 +63,7 @@ const IframeComponent = () => {
           const geometry = new THREE.TorusKnotGeometry(0.5, 0.15, 100, 16);
           const material = new THREE.MeshStandardMaterial({ color: 0x00ff00, metalness: 0.5, roughness: 0.5 });
           const torusKnot = new THREE.Mesh(geometry, material);
-          scene.add(torusKnot);
+       
 
           let car;
           const loader = new GLTFLoader();
@@ -105,6 +105,16 @@ const IframeComponent = () => {
           }
 
           window.addEventListener('resize', onWindowResize);
+
+          // Handle messages from parent
+          window.addEventListener('message', function(event) {
+            if (event.data.type === 'changeBackgroundColor') {
+              scene.background = new THREE.Color(event.data.color);
+            } else if (event.data.type === 'changeLightIntensity') {
+              ambientLight.intensity = event.data.intensity;
+              directionalLight.intensity = event.data.intensity;
+            }
+          });
         </script>
       </body>
       </html>
@@ -113,6 +123,18 @@ const IframeComponent = () => {
 
   const handleCreateIframe = useCallback(() => {
     setShouldLoadScene(true);
+  }, []);
+
+  const changeBackgroundColor = useCallback((color) => {
+    if (iframeRef.current) {
+      iframeRef.current.contentWindow.postMessage({ type: 'changeBackgroundColor', color }, '*');
+    }
+  }, []);
+
+  const changeLightIntensity = useCallback((intensity) => {
+    if (iframeRef.current) {
+      iframeRef.current.contentWindow.postMessage({ type: 'changeLightIntensity', intensity }, '*');
+    }
   }, []);
 
   useEffect(() => {
@@ -128,12 +150,14 @@ const IframeComponent = () => {
       iframe.title = '3D Scene';
 
       iframeContainerRef.current.appendChild(iframe);
+      iframeRef.current = iframe;
 
       // Cleanup function
       return () => {
         if (iframeContainerRef.current) {
           iframeContainerRef.current.innerHTML = '';
         }
+        iframeRef.current = null;
       };
     }
   }, [shouldLoadScene, generateHtmlContent]);
@@ -141,6 +165,18 @@ const IframeComponent = () => {
   return (
     <div>
       <button onClick={handleCreateIframe}>Add 3D Scene</button>
+      <div>
+        {/* <button onClick={() => changeBackgroundColor(0xffffff)}>white Background</button>
+        <button onClick={() => changeBackgroundColor(0x000000)}>black Background</button>
+        <button onClick={() => changeBackgroundColor(0x0000ff)}>Blue Background</button> */}
+        <input type="color" onChange={(e)=>{changeBackgroundColor(e.target.value)  }} />
+      </div>
+      <div>
+        {/* <button onClick={() => changeLightIntensity(4)}>Low Light</button>
+        <button onClick={() => changeLightIntensity(11)}>Medium Light</button>
+        <button onClick={() => changeLightIntensity(22)}>High Light</button> */}
+        <input type="range" min={0} max={30} step={0.5} onChange={(e)=>{changeLightIntensity(e.target.value)}} />
+      </div>
       <div ref={iframeContainerRef}></div>
     </div>
   );

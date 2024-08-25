@@ -167,7 +167,10 @@ const [shouldLoadScene, setShouldLoadScene] = useState(false);
 const iframeContainerRef = useRef(null);
 
 
-
+const [model, setmodel] = useState('scene');
+const changeModel = ()=>{
+  setmodel('scene2')
+}
 
 const generateHtmlContent = useCallback(() => {
   return `
@@ -235,7 +238,7 @@ const generateHtmlContent = useCallback(() => {
 
         let car;
         const loader = new GLTFLoader();
-        loader.load('http://127.0.0.1:5500/public/scene.gltf', function (gltf) {
+        loader.load('http://127.0.0.1:5500/public/${model}.gltf', function (gltf) {
             car = gltf.scene;
 
             // Center the car
@@ -310,7 +313,7 @@ useEffect(() => {
       }
     };
   }
-}, [shouldLoadScene, generateHtmlContent]);
+}, [shouldLoadScene, generateHtmlContent,model]);
 
   return (
    <>
@@ -319,8 +322,9 @@ useEffect(() => {
         <button onClick={addDiv}>AddDIV</button>
         <button onClick={deleteDiv}>Delete DIV</button>
         <button onClick={handleCreateIframe}>Add 3D</button>
+        {/* <button onClick={changeModel}>change model</button> */}
    
-        {/* <IframeComponent /> */}
+        <IframeComponent />
 
         <div style={{display:'flex', gap:'10px', alignItems:'center'}}> <span onClick={leftHorizontolly}>Left</span>  <span onClick={CenterHorizontolly}>Center</span> <span onClick={RightHorizontolly}>right</span></div>
  

@@ -794,7 +794,7 @@ console.log(styles);
         </div>
 
       
-        <div className='clickable-div' onClick={SelectDiv} id='body' style={{height:window.innerHeight, color:'#f2f2f2', overflow:'hidden',backgroundColor:'#242424', width:'100%'}}>
+        <div className='clickable-div' onClick={SelectDiv} id='body' style={{height:window.innerHeight, color:'#f2f2f2', overflowY:'scroll', overflowX:'hidden',backgroundColor:'#242424', width:'100%'}}>
 
       
       
