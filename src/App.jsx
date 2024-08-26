@@ -101,7 +101,8 @@ function App() {
        
           div.style.width = '100%' ;
           div.style.height = '4vh';
-          div.style.backgroundColor = parent.style.backgroundColor === 'rgb(91, 16, 180)' ? '#9237ff':'#5b10b4';
+          // div.style.backgroundColor = parent.style.backgroundColor === 'rgb(91, 16, 180)' ? '#9237ff':'#5b10b4';
+          div.style.backgroundColor = parent.style.backgroundColor === 'rgb(129,190,143)' ? '':'grey';
           div.style.color = '#f2f2f2';
           div.style.position = 'relative';
           div.onclick = SelectDiv

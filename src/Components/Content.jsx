@@ -349,6 +349,7 @@ const gridHelper = new THREE.GridHelper(100, 100);
           requestAnimationFrame(animate);
           controls.update();
         
+        
           renderer.render(scene, camera);
         }
 
@@ -425,7 +426,7 @@ useEffect(() => {
     const iframe = document.createElement('iframe');
     iframe.src = dataUrl;
     iframe.style.width = '100%';
-    iframe.style.height = '400px';
+    iframe.style.height = '100%';
     iframe.style.border = 'none';
     iframe.title = '3D Scene';
     
@@ -480,7 +481,7 @@ useEffect(() => {
       </div>
       <div>
      
-        <input type="range" defaultValue={7} min={0} max={30} step={0.5} onChange={(e)=>{changeLightIntensity(e.target.value)}} />
+        <input type="range" className="slider"   min={0} max={30} step={0.5} onChange={(e)=>{changeLightIntensity(e.target.value)}} />
         {/* <input type="text" onChange={(e)=>{ ChangeModel(e.target.value)}} /> */}
       </div>
       

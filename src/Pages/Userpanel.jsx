@@ -584,8 +584,8 @@ if(ele.style.backgroundColor= key){
 
 const MobileView = ()=>{
   const body = document.getElementById('body');
-  body.style.width = '390px';
-  body.style.height = '80vh';
+  body.style.width = '350px';
+  body.style.height = '90vh';
   body.style.border = '1px solid grey';
   body.style.borderRadius = '25px';
 
@@ -637,7 +637,7 @@ console.log(styles);
        
         <div id='menu' style={{display:'flex', flexDirection:'column', gap:'',width:"20%", border:'1px solid grey',height:'100vh', overflowY:'scroll', position:'relative', overflowX:'hidden'}}>
 
-          <div style={{display:'flex',height:'5vh', width:'20%', backgroundColor:'#242424', position:'fixed', bottom:'0px', justifyContent:'center', gap:'20px', alignItems:'center'}}>
+          <div style={{display:'flex',height:'5vh', width:'20%', backgroundColor:'#242424', position:'fixed', bottom:'0px', justifyContent:'center', gap:'20px', alignItems:'center', zIndex:'1200'}}>
             
             <div style={{cursor:'pointer'}} onClick={MobileView}>Mobile View</div>
             <div style={{cursor:'pointer'}} onClick={ExportCode}>Export Code</div>
@@ -645,7 +645,7 @@ console.log(styles);
           </div>
         
 
-<div style={{height:'20px', background:'linear-gradient(124deg, #5b10b4, rgba(215,38,61,1) 100%)', display:'flex', justifyContent:'center', alignItems:'center', padding:'10px', color:'white', opacity:'80%'}}>ReDesign</div>
+<div style={{height:'20px', background: 'linear-gradient(to right, #a8f79d, #79bfd9,  #ed89c8, #bf8aee, #e2c1ae )', display:'flex', justifyContent:'center', alignItems:'center', padding:'10px', color:'white', opacity:'80%'}}>ReDesign</div>
 <div  style={{display:'flex', gap:'10px', alignItems:'center', justifyContent:'space-around', backgroundColor:'#131313', padding:'10px'}}>
 
 <Link className='Link' to='/'>Structure</Link>
@@ -653,6 +653,14 @@ console.log(styles);
 <Link className='Link' to='/Advance'>Media</Link>
 
 
+
+
+
+</div>
+
+<div style={{width:'100%', display:'flex', justifyContent:'center', alignItems:'center'}}>
+
+<img src="http://localhost:5173/Intro.gif" height={200} width={200} alt="" />
 
 </div>
 
@@ -678,7 +686,7 @@ console.log(styles);
       
        <div id='backbody' style={{width:'80%',height:window.innerHeight, color:'#f2f2f2', overflowY:'scroll', overflowX:'hidden',backgroundColor:'#242424' }}>
 
-       <div className='clickable-div' onClick={SelectDiv} id='body' style={{height:window.innerHeight, color:'#f2f2f2', overflowY:'scroll', overflowX:'hidden',backgroundColor:'#242424', width:'100%'}}>
+       <div className='clickable-div' onClick={SelectDiv} id='body' style={{height:window.innerHeight, color:'#f2f2f2', overflowY:'scroll', overflowX:'hidden',backgroundColor:'#171717', width:'100%'}}>
 
 {/* <div className='non_selectables' style={{width:'100%', height:'24vh', display:'flex', justifyContent:'center', alignItems:'center'}}>
 

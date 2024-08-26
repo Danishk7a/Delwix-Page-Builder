@@ -44,7 +44,7 @@ useEffect(()=>{
  { gradientonToggle ?  <div  style={{position:'absolute', height:'100vh', width:'100%', padding:'20px', display:'flex', justifyContent:'center', alignItems:'center', backgroundColor:'#00000080', overflow:'hidden', top:'0px', left:'0px', zIndex:1200}}><GradientGenerator  gradientOn={gradientOn} /></div> :<></>}
    <button onClick={gradientOn}>Gradient Generator</button>
 
-   <div className="palette">
+   <div className="palette" style={{display:'flex', }}>
                 <div style={{backgroundColor: "#FF5733"}} data-color="#FF5733"></div>
                 <div style={{backgroundColor: "#33FF57"}} data-color="#33FF57"></div>
                 <div style={{backgroundColor: "#3357FF"}} data-color="#3357FF"></div>
