@@ -181,7 +181,7 @@ const IframeComponent = () => {
   }, []);
 
   useEffect(() => {
-    if (shouldLoadScene && iframeContainerRef.current) {
+    if (shouldLoadScene ) {
       const htmlContent = generateHtmlContent();
       const dataUrl = `data:text/html;charset=utf-8,${encodeURIComponent(htmlContent)}`;
 
@@ -191,19 +191,30 @@ const IframeComponent = () => {
       iframe.style.height = '400px';
       iframe.style.border = 'none';
       iframe.title = '3D Scene';
+      
+      const Box = document.getElementById('test')
 
-      iframeContainerRef.current.appendChild(iframe);
+      Box.appendChild(iframe);
       iframeRef.current = iframe;
 
       // Cleanup function
       return () => {
-        if (iframeContainerRef.current) {
-          iframeContainerRef.current.innerHTML = '';
+        if (Box) {
+          Box.innerHTML = '';
         }
         iframeRef.current = null;
       };
     }
   }, [shouldLoadScene, generateHtmlContent]);
+
+
+
+
+
+
+
+
+
 
   return (
     <div>
@@ -217,7 +228,7 @@ const IframeComponent = () => {
         <input type="range" defaultValue={7} min={0} max={30} step={0.5} onChange={(e)=>{changeLightIntensity(e.target.value)}} />
         <input type="text" onChange={(e)=>{ ChangeModel(e.target.value)}} />
       </div>
-      <div ref={iframeContainerRef}></div>
+      <div id='test'></div>
     </div>
   );
 };

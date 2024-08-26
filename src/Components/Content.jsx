@@ -168,14 +168,12 @@ const BoxShadow = (e)=>{
 }
 
 
+
+
+
 const [shouldLoadScene, setShouldLoadScene] = useState(false);
 const iframeContainerRef = useRef(null);
-
-
-const [model, setmodel] = useState('scene');
-const changeModel = ()=>{
-  setmodel('scene2')
-}
+const iframeRef = useRef(null);
 
 const generateHtmlContent = useCallback(() => {
   return `
@@ -188,10 +186,7 @@ const generateHtmlContent = useCallback(() => {
       <style>
         body { 
           margin: 0; 
-          background-color: #f0f0f0; 
           overflow: hidden;
-          padding:0;
-          border:none;
         }
         canvas { 
           width: 100%; 
@@ -218,17 +213,14 @@ const generateHtmlContent = useCallback(() => {
 
         // Set up the scene
         const scene = new THREE.Scene();
-
- 
-          scene.background = new THREE.Color(0x511499);
+        scene.background = new THREE.Color(0x171717);
 
         // Set up the camera
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.z = 5;
 
         // Set up the renderer
-        const renderer = new THREE.WebGLRenderer({ antialias: true ,   alpha: true });
-        renderer.setClearColor(0x000000, 0);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
@@ -238,14 +230,14 @@ const generateHtmlContent = useCallback(() => {
         controls.dampingFactor = 0.05;
 
         // Create a torus knot
-        // const geometry = new THREE.TorusKnotGeometry(0.5, 0.15, 100, 16);
-        // const material = new THREE.MeshStandardMaterial({ color: 0x00ff00, metalness: 0.5, roughness: 0.5 });
-        // const torusKnot = new THREE.Mesh(geometry, material);
-        // scene.add(torusKnot);
+        const geometry = new THREE.TorusKnotGeometry(0.5, 0.15, 100, 16);
+        const material = new THREE.MeshStandardMaterial({ color: 0x00ff00, metalness: 0.5, roughness: 0.5 });
+        const torusKnot = new THREE.Mesh(geometry, material);
+     
 
         let car;
         const loader = new GLTFLoader();
-        loader.load('http://localhost:5173/${model}.gltf', function (gltf) {
+        loader.load('http://localhost:5173/scene.gltf', function (gltf) {
             car = gltf.scene;
 
             // Center the car
@@ -259,12 +251,32 @@ const generateHtmlContent = useCallback(() => {
         });
 
         // Add lights
-        const ambientLight = new THREE.AmbientLight(0xffffff, 4);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 7);
         scene.add(ambientLight);
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 11);
-        directionalLight.position.set(5, 10, 7.5);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+        directionalLight.position.set(0, 10, 0);
         scene.add(directionalLight);
+        directionalLight.castShadow = true;
+
+        const directionalLight2 = new THREE.DirectionalLight(0xff0000, 2);
+        directionalLight2.position.set(5, 2, 0);
+        scene.add(directionalLight2);
+        directionalLight2.castShadow = true;
+
+        
+        const directionalLight3 = new THREE.DirectionalLight(0x0000ff, 2);
+        directionalLight3.position.set(-5, 2, 0);
+        scene.add(directionalLight3);
+        directionalLight3.castShadow = true;
+
+       
+
+
+
+const gridHelper = new THREE.GridHelper(10, 10);
+
+      // scene.add(gridHelper);
 
         // Animation loop
         function animate() {
@@ -283,12 +295,33 @@ const generateHtmlContent = useCallback(() => {
         }
 
         window.addEventListener('resize', onWindowResize);
-        
-        document.body.addEventListener('click', () => {
-          console.log('Clicked inside iframe');
-          
-          
+
+        // Handle messages from parent
+
+        window.addEventListener('message', function(event) {
+          if (event.data.type === 'changeBackgroundColor') {
+            scene.background = new THREE.Color(event.data.color);
+          } else if (event.data.type === 'changeLightIntensity') {
+            // ambientLight.intensity = event.data.intensity;
+            directionalLight.intensity = event.data.intensity;
+          }else if(event.data.type === 'ChangeModel'){
+          const loader = new GLTFLoader();
+        loader.load(event.data.model, function (gltf) {
+            car = gltf.scene;
+
+            // Center the car
+            const box = new THREE.Box3().setFromObject(car);
+            const center = box.getCenter(new THREE.Vector3());
+            car.position.sub(center);
+            scene.add(car);
+            console.log(car);
+
+            animate();
         });
+          
+          }
+        });
+
       </script>
     </body>
     </html>
@@ -299,8 +332,26 @@ const handleCreateIframe = useCallback(() => {
   setShouldLoadScene(true);
 }, []);
 
+const changeBackgroundColor = useCallback((color) => {
+  if (iframeRef.current) {
+    iframeRef.current.contentWindow.postMessage({ type: 'changeBackgroundColor', color }, '*');
+  }
+}, []);
+
+const changeLightIntensity = useCallback((intensity) => {
+  if (iframeRef.current) {
+    iframeRef.current.contentWindow.postMessage({ type: 'changeLightIntensity', intensity }, '*');
+  }
+}, []);
+
+const ChangeModel = useCallback((model) => {
+  if (iframeRef.current) {
+    iframeRef.current.contentWindow.postMessage({ type: 'ChangeModel', model }, '*');
+  }
+}, []);
+
 useEffect(() => {
-  if (shouldLoadScene) {
+  if (shouldLoadScene ) {
     const htmlContent = generateHtmlContent();
     const dataUrl = `data:text/html;charset=utf-8,${encodeURIComponent(htmlContent)}`;
 
@@ -310,22 +361,35 @@ useEffect(() => {
     iframe.style.height = '400px';
     iframe.style.border = 'none';
     iframe.title = '3D Scene';
-    iframe.style.backgroundColor = 'transparent';
-    iframe.id = `THREE`
-    // iframe.onclick = SelectDiv
-  
+    
+    const Box = document.getElementById(currentSelectedDiv)
 
-
-    document.getElementById(currentSelectedDiv).appendChild(iframe);
+    Box.appendChild(iframe);
+    iframeRef.current = iframe;
 
     // Cleanup function
-    return () => {
-      if (iframeContainerRef.current) {
-        iframeContainerRef.current.innerHTML = '';
-      }
-    };
+    // return () => {
+    //   if (Box) {
+    //     Box.innerHTML = '';
+    //   }
+    //   iframeRef.current = null;
+    // };
+
+
   }
-}, [shouldLoadScene, generateHtmlContent,model]);
+}, [shouldLoadScene, generateHtmlContent]);
+
+
+
+
+
+
+
+
+
+
+
+
 
   return (
    <>
@@ -340,6 +404,20 @@ useEffect(() => {
         {/* <button onClick={changeModel}>change model</button> */}
    
         {/* <IframeComponent /> */}
+
+        <div>
+      
+      <div>
+      
+        <input type="color" onChange={(e)=>{changeBackgroundColor(e.target.value)  }} />
+      </div>
+      <div>
+     
+        <input type="range" defaultValue={7} min={0} max={30} step={0.5} onChange={(e)=>{changeLightIntensity(e.target.value)}} />
+        {/* <input type="text" onChange={(e)=>{ ChangeModel(e.target.value)}} /> */}
+      </div>
+      
+    </div>
 
 {SelectedElementIs && SelectedElementIs }
         {SelectedElementIs === 'IMG' ?<></> :        <div style={{display:'flex', gap:'10px', alignItems:'center'}}> <span onClick={leftHorizontolly}>Left</span>  <span onClick={CenterHorizontolly}>Center</span> <span onClick={RightHorizontolly}>right</span></div>}

@@ -769,7 +769,7 @@ console.log(styles);
 
 <Link className='Link' to='/'>Structure</Link>
 <Link className='Link' to='/Styles'>Style</Link>
-<Link className='Link' to='/Advance'>Canvas</Link>
+<Link className='Link' to='/Advance'>Media</Link>
 
 
 
