@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Icon Search with FontAwesome</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .icon {
+            font-size: 50px;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>FontAwesome Icon Search</h1>
+    <input type="text" id="icon-search" placeholder="Search for icons..." oninput="searchIcons()">
+    <div id="icon-results"></div>
+    <script>
+        function searchIcons() {
+            const query = document.getElementById('icon-search').value.toLowerCase();
+            const resultsContainer = document.getElementById('icon-results');
+            resultsContainer.innerHTML = ''; // Clear previous results
+
+            // List of available FontAwesome icons (partial list for demonstration)
+            const icons = [
+                'fa-home', 'fa-user', 'fa-cog', 'fa-heart', 'fa-camera',
+                'fa-car', 'fa-envelope', 'fa-bell', 'fa-star', 'fa-check'
+            ];
+
+            icons.forEach(iconClass => {
+                if (iconClass.includes(query)) {
+                    const iElement = document.createElement('i');
+                    iElement.className = `fas ${iconClass} icon`;
+                    resultsContainer.appendChild(iElement);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

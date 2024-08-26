@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Image Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        #search-container {
+            margin: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        #results {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px;
+        }
+        .image-container {
+            margin: 10px;
+        }
+        img {
+            max-width: 300px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div id="search-container">
+        <input type="text" id="query" placeholder="Search for images...">
+        <button onclick="searchImages()">Search</button>
+    </div>
+    <div id="results"></div>
+    <script>
+        const apiKey = 'AIzaSyAhqaSvOjgLxgfzs9IkCp1LOqjtnX29VcU'; // Replace with your Google API Key
+        const cx = 'e1b861b6c4379455f'; // Replace with your Custom Search Engine ID
+
+        async function searchImages() {
+            const query = document.getElementById('query').value;
+            const response = await fetch(`https://www.googleapis.com/customsearch/v1?q=${query}&cx=${cx}&key=${apiKey}&searchType=image`);
+            const data = await response.json();
+            displayImages(data.items);
+        }
+
+        function displayImages(images) {
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = ''; // Clear previous results
+            images.forEach(image => {
+                const imgElement = document.createElement('img');
+                imgElement.src = image.link;
+                imgElement.alt = image.title || 'Image';
+                imgElement.className = 'image-container';
+                resultsContainer.appendChild(imgElement);
+            });
+        }
+    </script>
+</body>
+</html>

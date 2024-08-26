@@ -67,7 +67,7 @@ const IframeComponent = () => {
 
           let car;
           const loader = new GLTFLoader();
-          loader.load('http://127.0.0.1:5500/public/scene.gltf', function (gltf) {
+          loader.load('http://localhost:5173/scene.gltf', function (gltf) {
               car = gltf.scene;
 
               // Center the car
@@ -81,12 +81,32 @@ const IframeComponent = () => {
           });
 
           // Add lights
-          const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+          const ambientLight = new THREE.AmbientLight(0xffffff, 7);
           scene.add(ambientLight);
 
-          const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-          directionalLight.position.set(5, 10, 7.5);
+          const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+          directionalLight.position.set(0, 10, 0);
           scene.add(directionalLight);
+          directionalLight.castShadow = true;
+
+          const directionalLight2 = new THREE.DirectionalLight(0xff0000, 2);
+          directionalLight2.position.set(5, 2, 0);
+          scene.add(directionalLight2);
+          directionalLight2.castShadow = true;
+
+          
+          const directionalLight3 = new THREE.DirectionalLight(0x0000ff, 2);
+          directionalLight3.position.set(-5, 2, 0);
+          scene.add(directionalLight3);
+          directionalLight3.castShadow = true;
+
+         
+
+
+
+ const gridHelper = new THREE.GridHelper(10, 10);
+
+        // scene.add(gridHelper);
 
           // Animation loop
           function animate() {
@@ -107,14 +127,31 @@ const IframeComponent = () => {
           window.addEventListener('resize', onWindowResize);
 
           // Handle messages from parent
+
           window.addEventListener('message', function(event) {
             if (event.data.type === 'changeBackgroundColor') {
               scene.background = new THREE.Color(event.data.color);
             } else if (event.data.type === 'changeLightIntensity') {
-              ambientLight.intensity = event.data.intensity;
+              // ambientLight.intensity = event.data.intensity;
               directionalLight.intensity = event.data.intensity;
+            }else if(event.data.type === 'ChangeModel'){
+            const loader = new GLTFLoader();
+          loader.load(event.data.model, function (gltf) {
+              car = gltf.scene;
+
+              // Center the car
+              const box = new THREE.Box3().setFromObject(car);
+              const center = box.getCenter(new THREE.Vector3());
+              car.position.sub(center);
+              scene.add(car);
+              console.log(car);
+
+              animate();
+          });
+            
             }
           });
+
         </script>
       </body>
       </html>
@@ -134,6 +171,12 @@ const IframeComponent = () => {
   const changeLightIntensity = useCallback((intensity) => {
     if (iframeRef.current) {
       iframeRef.current.contentWindow.postMessage({ type: 'changeLightIntensity', intensity }, '*');
+    }
+  }, []);
+
+  const ChangeModel = useCallback((model) => {
+    if (iframeRef.current) {
+      iframeRef.current.contentWindow.postMessage({ type: 'ChangeModel', model }, '*');
     }
   }, []);
 
@@ -166,16 +209,13 @@ const IframeComponent = () => {
     <div>
       <button onClick={handleCreateIframe}>Add 3D Scene</button>
       <div>
-        {/* <button onClick={() => changeBackgroundColor(0xffffff)}>white Background</button>
-        <button onClick={() => changeBackgroundColor(0x000000)}>black Background</button>
-        <button onClick={() => changeBackgroundColor(0x0000ff)}>Blue Background</button> */}
+      
         <input type="color" onChange={(e)=>{changeBackgroundColor(e.target.value)  }} />
       </div>
       <div>
-        {/* <button onClick={() => changeLightIntensity(4)}>Low Light</button>
-        <button onClick={() => changeLightIntensity(11)}>Medium Light</button>
-        <button onClick={() => changeLightIntensity(22)}>High Light</button> */}
-        <input type="range" min={0} max={30} step={0.5} onChange={(e)=>{changeLightIntensity(e.target.value)}} />
+     
+        <input type="range" defaultValue={7} min={0} max={30} step={0.5} onChange={(e)=>{changeLightIntensity(e.target.value)}} />
+        <input type="text" onChange={(e)=>{ ChangeModel(e.target.value)}} />
       </div>
       <div ref={iframeContainerRef}></div>
     </div>

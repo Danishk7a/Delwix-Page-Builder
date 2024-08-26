@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movable and Resizable Div</title>
+    <style>
+        .resizable {
+            width: 400px;
+            height: 400px;
+            background-color: #4CAF50;
+            position: absolute;
+            cursor: move;
+            font-size: 32px;
+            overflow: hidden;
+        }
+
+        .handle {
+            width: 16px;
+            height: 16px;
+            background-color: #000;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            cursor: nwse-resize;
+        }
+
+
+        
+        /* Ensure image inside the div scales correctly */
+        #resizable img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensure the image covers the area without distortion */
+        }
+    </style>
+</head>
+<body>
+
+        <div class="resizable">
+            
+    
+            <div class="handle"></div>
+        </div>
+    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.getElementsByTagName('img');
+            for (let img of images) {
+                img.addEventListener('mousedown', function(e) {
+                    e.preventDefault();
+                });
+                
+                img.addEventListener('dragstart', function(e) {
+                    e.preventDefault();
+                });
+            }
+        });
+
+        // Select the div and handle
+        const resizableDiv = document.querySelector('.resizable');
+        const handle = document.querySelector('.handle');
+
+        // Variables for dragging and resizing
+        let isDragging = false;
+        let isResizing = false;
+        let startX, startY, startWidth, startHeight, startLeft, startTop;
+
+        // Function to start dragging
+        function startDragging(e) {
+            if (isResizing) return; // Prevent dragging if resizing is active
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            startLeft = parseInt(window.getComputedStyle(resizableDiv).left, 10) || 0;
+            startTop = parseInt(window.getComputedStyle(resizableDiv).top, 10) || 0;
+            document.addEventListener('mousemove', onDragMove);
+            document.addEventListener('mouseup', stopDragging);
+        }
+
+        // Function to handle dragging
+        function onDragMove(e) {
+            if (isDragging) {
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                resizableDiv.style.left = `${startLeft + deltaX}px`;
+                resizableDiv.style.top = `${startTop + deltaY}px`;
+            }
+        }
+
+        // Function to stop dragging
+        function stopDragging() {
+            isDragging = false;
+            document.removeEventListener('mousemove', onDragMove);
+            document.removeEventListener('mouseup', stopDragging);
+        }
+
+        // Function to start resizing
+        function startResizing(e) {
+            if (isDragging) return; // Prevent resizing if dragging is active
+            e.preventDefault();
+            isResizing = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            startWidth = parseInt(window.getComputedStyle(resizableDiv).width, 10);
+            startHeight = parseInt(window.getComputedStyle(resizableDiv).height, 10);
+            document.addEventListener('mousemove', onResizeMove);
+            document.addEventListener('mouseup', stopResizing);
+        }
+
+        // Function to handle resizing
+        function onResizeMove(e) {
+            if (isResizing) {
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                const newWidth = startWidth + deltaX;
+                const newHeight = startHeight + deltaY;
+                
+                // Resize the container
+                resizableDiv.style.width = `${newWidth}px`;
+                resizableDiv.style.height = `${newHeight}px`;
+            }
+        }
+
+        // Function to stop resizing
+        function stopResizing() {
+            isResizing = false;
+            document.removeEventListener('mousemove', onResizeMove);
+            document.removeEventListener('mouseup', stopResizing);
+        }
+
+        // Attach event listeners
+        resizableDiv.addEventListener('mousedown', startDragging);
+        handle.addEventListener('mousedown', startResizing);
+  
+  
+  
+  </script>
+</body>
+</html>
+
+
+
+
+  

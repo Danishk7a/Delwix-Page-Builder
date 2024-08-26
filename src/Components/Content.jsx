@@ -4,7 +4,10 @@ import IframeComponent from './Iframe';
 
 
 
-const Content = ({addDiv,currentSelectedDiv , setuniqueID,uniqueID, SelectDiv}) => {
+const Content = ({addDiv,currentSelectedDiv , setuniqueID,uniqueID, SelectDiv, SelectedElementIs, setSelectedElementIs}) => {
+
+
+
 
 
 
@@ -124,8 +127,8 @@ const imgHandle = (e) => {
    const div = document.getElementById(currentSelectedDiv);
   let v = document.getElementById('addtxt').value
  
-  const textBox =  document.createElement('div');
-  textBox.id = `div-${uniqueID}`
+  const textBox =  document.createElement('p');
+  textBox.id = `txt-${uniqueID}`
   setuniqueID((pre)=> pre +1);
   textBox.className = 'clickable-div';
   textBox.onclick = SelectDiv
@@ -148,6 +151,7 @@ const Opacity = (e)=>{
   const div = document.getElementById(currentSelectedDiv);
   const opacityValue = e.target.value / 100; // Assuming the input range is 0-100
   div.style.opacity = opacityValue;
+  console.log(SelectedElementIs)
 
 
 }
@@ -158,6 +162,7 @@ const BoxShadow = (e)=>{
   const opacityValue = e.target.value / 100; // Assuming the input range is 0-100
   // div.style.boxShadow = `1px 1px ${e.target.value}px black`;
   div.style.filter = `drop-shadow(30px 10px ${e.target.value}px #242424)`;
+
  
 
 }
@@ -185,6 +190,8 @@ const generateHtmlContent = useCallback(() => {
           margin: 0; 
           background-color: #f0f0f0; 
           overflow: hidden;
+          padding:0;
+          border:none;
         }
         canvas { 
           width: 100%; 
@@ -238,7 +245,7 @@ const generateHtmlContent = useCallback(() => {
 
         let car;
         const loader = new GLTFLoader();
-        loader.load('http://127.0.0.1:5500/public/${model}.gltf', function (gltf) {
+        loader.load('http://localhost:5173/${model}.gltf', function (gltf) {
             car = gltf.scene;
 
             // Center the car
@@ -276,6 +283,12 @@ const generateHtmlContent = useCallback(() => {
         }
 
         window.addEventListener('resize', onWindowResize);
+        
+        document.body.addEventListener('click', () => {
+          console.log('Clicked inside iframe');
+          
+          
+        });
       </script>
     </body>
     </html>
@@ -298,10 +311,9 @@ useEffect(() => {
     iframe.style.border = 'none';
     iframe.title = '3D Scene';
     iframe.style.backgroundColor = 'transparent';
-    iframe.id = `div-${uniqueID}`
-    setuniqueID((pre)=> pre +1);
-    iframe.className = 'clickable-div';
-    iframe.onclick = SelectDiv
+    iframe.id = `THREE`
+    // iframe.onclick = SelectDiv
+  
 
 
     document.getElementById(currentSelectedDiv).appendChild(iframe);
@@ -319,14 +331,19 @@ useEffect(() => {
    <>
    <div style={{display:'flex', flexDirection:'column', gap:'20px', justifyContent:'center'}}>
    
-        <button onClick={addDiv}>AddDIV</button>
+   
+{SelectedElementIs === 'IMG' ?<></> :<button onClick={addDiv}>AddDIV</button> }
+{SelectedElementIs === 'IMG' ?<></> :   <button onClick={handleCreateIframe}>Add 3D</button> }
+        
         <button onClick={deleteDiv}>Delete DIV</button>
-        <button onClick={handleCreateIframe}>Add 3D</button>
+     
         {/* <button onClick={changeModel}>change model</button> */}
    
-        <IframeComponent />
+        {/* <IframeComponent /> */}
 
-        <div style={{display:'flex', gap:'10px', alignItems:'center'}}> <span onClick={leftHorizontolly}>Left</span>  <span onClick={CenterHorizontolly}>Center</span> <span onClick={RightHorizontolly}>right</span></div>
+{SelectedElementIs && SelectedElementIs }
+        {SelectedElementIs === 'IMG' ?<></> :        <div style={{display:'flex', gap:'10px', alignItems:'center'}}> <span onClick={leftHorizontolly}>Left</span>  <span onClick={CenterHorizontolly}>Center</span> <span onClick={RightHorizontolly}>right</span></div>}
+
  
 
 <div>Height :  <input type="range" min="0" max="100"  className="slider" onChange={heightChange} /></div>
@@ -336,19 +353,27 @@ useEffect(() => {
 <div>Padding :  <input type="range" min="0" max="100"  className="slider" onChange={paddingHandle} /></div>
 
 
-<div>Gap :  <input type="range" min="0" max="100"  className="slider" onChange={Gap} /></div>
 
-<div style={{display:'flex', gap:'20px'}}><button onClick={FlexDirectionColumn}>Change To Column</button>
-<button onClick={FlexDirectionRow}>Change To Row</button></div>
+{SelectedElementIs === 'IMG' ?<></> :<div>Gap :  <input type="range" min="0" max="100"  className="slider" onChange={Gap} /></div>}
 
- <div style={{display:'flex', gap:'10px', alignItems:'center'}}> <span onClick={Top}>Top</span>  <span onClick={Middle}>Middle</span> <span onClick=
-    {Bottom}>Bottom</span></div>
-
-<div>Add Text : <input id='addtxt' type="text"  /> <button onClick={addText}>Add</button></div>
-<div>Font Size :  <input type="range" min="0" max="100"  className="slider" onChange={fontSize} /></div>
+{SelectedElementIs === 'IMG' ?<></> :<div style={{display:'flex', gap:'20px'}}><button onClick={FlexDirectionColumn}>Change To Column</button>
+<button onClick={FlexDirectionRow}>Change To Row</button></div>}
 
 
-<div style={{display:'flex', gap:'20px'}} >Add Image : <input type="file" onChange={imgHandle} /></div>
+
+{SelectedElementIs === 'IMG' ?<></> : <div style={{display:'flex', gap:'10px', alignItems:'center'}}> <span onClick={Top}>Top</span>  <span onClick={Middle}>Middle</span> <span onClick=
+    {Bottom}>Bottom</span></div>}
+
+
+
+
+
+{SelectedElementIs === 'IMG' ?<></> :<div>Add Text : <input id='addtxt' type="text"  /> <button onClick={addText}>Add</button></div>}
+
+  {SelectedElementIs === 'IMG' ?<></> :<div>Font Size :  <input type="range" min="0" max="100"  className="slider" onChange={fontSize} /></div>}
+
+  {SelectedElementIs === 'IMG' ?<></> :<div style={{display:'flex', gap:'20px'}} >Add Image : <input type="file" onChange={imgHandle} /></div>}
+
 <div>Opacity :  <input type="range" min="0" max="100"  className="slider" onChange={Opacity} /></div>
 <div>Box Shadow :  <input type="range" min="0" max="100"  className="slider" onChange={BoxShadow} /></div>
 

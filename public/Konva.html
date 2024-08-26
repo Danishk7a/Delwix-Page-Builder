@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konva.js Drawing Tool</title>
+    <script src="https://cdn.jsdelivr.net/npm/konva@8.2.2/konva.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #container {
+            border: 2px solid black;
+            margin-top: 20px;
+            width: 80vw;
+            height: 70vh;
+            background-color: white;
+        }
+        .toolbar {
+            display: flex;
+            margin-top: 10px;
+            align-items: center;
+        }
+        .toolbar input[type="color"], 
+        .toolbar input[type="range"] {
+            margin-right: 10px;
+            padding: 5px;
+        }
+        #panel{
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <div id="panel">
+        
+        <div class="gcse-search"></div>
+
+
+       <div>
+        <div class="toolbar">
+            <input type="color" id="color-picker" value="#000000">
+            <label for="brush-size">Brush Size:</label>
+            <input type="range" id="brush-size" min="1" max="50" value="5">
+            <button id="clear">Clear</button>
+        </div>
+        <div id="container"></div>
+       </div>
+    </div>
+
+    <script>
+        // Create a Konva stage and layer
+        const stage = new Konva.Stage({
+            container: 'container',
+            width: window.innerWidth * 0.8,
+            height: window.innerHeight * 0.7
+        });
+
+        const layer = new Konva.Layer();
+        stage.add(layer);
+
+        let currentColor = '#000000';
+        let brushSize = 5;
+        let isDrawing = false;
+        let currentLine = null;
+
+        // Handle color picker
+        document.getElementById('color-picker').addEventListener('input', (e) => {
+            currentColor = e.target.value;
+        });
+
+        // Handle brush size slider
+        document.getElementById('brush-size').addEventListener('input', (e) => {
+            brushSize = parseInt(e.target.value, 10);
+        });
+
+        // Handle clear button
+        document.getElementById('clear').addEventListener('click', () => {
+            layer.clear();
+        });
+
+        // Handle mouse events for drawing
+        stage.on('mousedown', (e) => {
+            if (e.target === stage) {
+                isDrawing = true;
+                const pos = stage.getPointerPosition();
+                currentLine = new Konva.Line({
+                    stroke: currentColor,
+                    strokeWidth: brushSize,
+                    points: [pos.x, pos.y],
+                    lineCap: 'round',
+                    lineJoin: 'round',
+                    draggable: true
+                });
+                layer.add(currentLine);
+            }
+        });
+
+        stage.on('mousemove', (e) => {
+            if (isDrawing) {
+                const pos = stage.getPointerPosition();
+                const newPoints = currentLine.points().concat([pos.x, pos.y]);
+                currentLine.points(newPoints);
+                layer.batchDraw();
+            }
+        });
+
+        stage.on('mouseup', () => {
+            isDrawing = false;
+        });
+    </script>
+    <script async src="https://cse.google.com/cse.js?cx=e1b861b6c4379455f">
+        </script>
+</body>
+</html>

@@ -796,6 +796,12 @@ console.log(styles);
       
         <div className='clickable-div' onClick={SelectDiv} id='body' style={{height:window.innerHeight, color:'#f2f2f2', overflowY:'scroll', overflowX:'hidden',backgroundColor:'#242424', width:'100%'}}>
 
+          {/* <div className='non_selectables' style={{width:'100%', height:'24vh', display:'flex', justifyContent:'center', alignItems:'center'}}>
+
+          <div className='non_selectables' >Add Element</div>
+
+          </div> */}
+
       
       
         </div>
