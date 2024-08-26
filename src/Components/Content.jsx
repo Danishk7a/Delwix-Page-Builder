@@ -111,6 +111,7 @@ const imgHandle = (e) => {
    img.className = 'clickable-div';
    img.onclick = SelectDiv;
    img.style.height = '200px';
+   img.style.width = '200px';
  
    const file = e.target.files[0];
    if (file) {
@@ -246,6 +247,16 @@ const generateHtmlContent = useCallback(() => {
             car.position.sub(center);
             scene.add(car);
             console.log(car);
+             car.traverse((child) => {
+                if (child.isMesh) {
+                    if (child.name === 'Cylinder007_alloy_0' ||
+                        child.name === 'Cylinder013_alloy_0' ||
+                        child.name === 'Cylinder012_alloy_0' ||
+                        child.name === 'Cylinder011_alloy_0') {
+                        child.userData.isRotatable = true;
+                    }
+                }
+            });
 
             animate();
         });
@@ -270,13 +281,66 @@ const generateHtmlContent = useCallback(() => {
         scene.add(directionalLight3);
         directionalLight3.castShadow = true;
 
+
+         function moveforward() {
+            let timer = 0.1
+setInterval(()=>{
+
+    timer +=0.1
+},100)
+
+
+
+            if (car) {
+                car.traverse((child) => {
+                    if (child.isMesh && child.userData.isRotatable) {
+                        child.rotation.x += 0.1;
+                        car.position.z += timer
+                    }
+                });
+            }
+        }
+
+        function movebackward() {
+ 
+            let timer = 0.1
+setInterval(()=>{
+
+    timer +=0.1
+},100)
+
+if (car) {
+    car.traverse((child) => {
+        if (child.isMesh && child.userData.isRotatable) {
+            child.rotation.x -= 0.1;
+            car.position.z -= timer
+            // camera.position.z = 0.1
+        }
+    });
+}
+}
+
+
+        window.addEventListener('keydown', (event) => {
+            if (event.code === 'ArrowUp') {
+                moveforward()
+            }
+        });
+
+        window.addEventListener('keydown', (event) => {
+            if (event.code === 'ArrowDown') {
+                movebackward()
+            }
+        });
+
+
        
 
 
 
-const gridHelper = new THREE.GridHelper(10, 10);
+const gridHelper = new THREE.GridHelper(100, 100);
 
-      // scene.add(gridHelper);
+      scene.add(gridHelper);
 
         // Animation loop
         function animate() {

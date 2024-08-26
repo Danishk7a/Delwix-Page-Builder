@@ -48,7 +48,8 @@ const Advance = ({currentSelectedDiv,uniqueID, setuniqueID , SelectDiv}) => {
     setuniqueID((pre)=> pre +1);
     img.className = 'clickable-div';
     img.onclick = SelectDiv;
-    img.style.height = '200px';
+    img.style.height = '400px';
+    img.style.width = '400px'
     img.src = imglink
 
     div.appendChild(img)

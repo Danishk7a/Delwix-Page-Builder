@@ -147,34 +147,34 @@ function App() {
 
 
 
-useEffect(()=>{
-  document.addEventListener('DOMContentLoaded', function() {
-    const images = document.getElementsByTagName('img');
-    for (let img of images) {
-        img.addEventListener('mousedown', function(e) {
-            e.preventDefault();
-        });
+// useEffect(()=>{
+//   document.addEventListener('DOMContentLoaded', function() {
+//     const images = document.getElementsByTagName('img');
+//     for (let img of images) {
+//         img.addEventListener('mousedown', function(e) {
+//             e.preventDefault();
+//         });
         
-        img.addEventListener('dragstart', function(e) {
-            e.preventDefault();
-        });
-    }
-});
+//         img.addEventListener('dragstart', function(e) {
+//             e.preventDefault();
+//         });
+//     }
+// });
 
-// Select the div and handle
-const resizableDiv = document.querySelector('.resizable');
-const handle = document.querySelector('.handle');
+// // Select the div and handle
+// const resizableDiv = document.querySelector('.resizable');
+// const handle = document.querySelector('.handle');
 
 
 
-// Attach event listeners
-if(resizableDiv){
-  console.log("ADDED SUCCESFUL")
-  resizableDiv.addEventListener('mousedown', startDragging);
-// handle.addEventListener('mousedown', startResizing);
-}
+// // Attach event listeners
+// if(resizableDiv){
+//   console.log("ADDED SUCCESFUL")
+//   resizableDiv.addEventListener('mousedown', startDragging);
+// // handle.addEventListener('mousedown', startResizing);
+// }
 
-},[currentSelectedDiv])
+// },[currentSelectedDiv])
 
 
 // Variables for dragging and resizing
