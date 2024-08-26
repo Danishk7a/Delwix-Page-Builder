@@ -218,7 +218,9 @@ const generateHtmlContent = useCallback(() => {
 
         // Set up the camera
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 5;
+        camera.position.z = -5.4;
+        camera.position.y = 0.66;
+        camera.position.x = -0.321
 
         // Set up the renderer
         const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -346,6 +348,7 @@ const gridHelper = new THREE.GridHelper(100, 100);
         function animate() {
           requestAnimationFrame(animate);
           controls.update();
+        
           renderer.render(scene, camera);
         }
 

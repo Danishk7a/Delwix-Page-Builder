@@ -183,36 +183,7 @@ const paddingHandle = (e)=>{
 
 }
 
-// function getCss() {
-//       const element = document.getElementById(currentSelectedDiv);
-//       const styles = window.getComputedStyle(element);
-//       const cssProperties = {};
 
-//       // Get inline styles
-//       const inlineStyles = element.style;
-//       for (let i = 0; i < inlineStyles.length; i++) {
-//         const property = inlineStyles[i];
-//         cssProperties[property] = inlineStyles.getPropertyValue(property);
-//       }
-
-//       // Get stylesheet rules
-//       for (let sheet of document.styleSheets) {
-//         try {
-//           for (let rule of sheet.cssRules) {
-//             if (rule.style && element.matches(rule.selectorText)) {
-//               for (let i = 0; i < rule.style.length; i++) {
-//                 const property = rule.style[i];
-//                 cssProperties[property] = styles.getPropertyValue(property);
-//               }
-//             }
-//           }
-//         } catch (e) {
-//           console.log(`Couldn't access stylesheet: ${e}`);
-//         }
-//       }
-
-//       console.log(cssProperties);
-//     }
 
     const addText =()=>{
       const div = document.getElementById(currentSelectedDiv);
@@ -484,29 +455,6 @@ const combinedPalette = [
       const obj = Theme;
     
 
-  // Object.values(obj).forEach(value => {
-  //   let random = Math.floor(Math.random()*20)
-  //   let random2 = Math.floor(Math.random()*20)   
-    
-  //  Object.keys(obj).forEach(key => {
-  //   console.log("LOOK ",obj[key].backgroundColor)
-
-  //   if (obj[key].backgroundColor === value.backgroundColor) {
-  //     obj[key].backgroundColor = combinedPalette[random];
-     
-  //   }
-
-  //   if (obj[key].color === value.color) {
-  //     obj[key].color = combinedPalette[random2];
-     
-  //   }
-
-    
-  // })
-  
-  
-  // });
-
 
 
 
@@ -518,10 +466,7 @@ Object.keys(obj).forEach(key => {
   
   uniqueBG.push(obj[key].backgroundColor);
    uniqueColors.push(obj[key].color)
-// const ele = document.getElementById(key);
 
-//     ele.style.backgroundColor = obj[key].backgroundColor;
-//     ele.style.color = obj[key].color
     });
 
 
@@ -543,14 +488,12 @@ const ele = document.getElementById(key);
 
 
 Object.keys(BGMAP).forEach(key=>{         
-//  console.log(BGMAP[key])
 
 if(ele.style.backgroundColor= key){
   ele.style.backgroundColor = BGMAP[key];
   console.log("INSIDE")
 }
    
-  // ele.style.color = obj[key].color
    
 
 
@@ -563,50 +506,6 @@ if(ele.style.backgroundColor= key){
 
 }
     
-  // const ChangeLayout = ()=>{
-    
-  //   const obj = Theme;
-
-
-  //   Object.values(obj).forEach(value => {
-  //     let random = Math.floor(Math.random()*4)
-  //     let random2 = Math.floor(Math.random()*4)
-      
-  //    Object.keys(obj).forEach(key => {
-  //     console.log(obj[key].backgroundColor)
-  
-  //     if (obj[key].backgroundColor === value.backgroundColor) {
-  //       obj[key].backgroundColor = combinedPalette[random];
-       
-  //     }
-  
-  //     if (obj[key].color === value.color) {
-  //       obj[key].color = combinedPalette[random2];
-       
-  //     }
-  
-      
-  //   })
-    
-    
-  //   });
-  
-  // setTheme(obj);
-  
-  
-  // console.log(obj)
-  
-  // Object.keys(obj).forEach(key => {
-    
-  //   const ele = document.getElementById(key);
-  //     ele.style.backgroundColor = obj[key].backgroundColor;
-  //     ele.style.color = obj[key].color
-      
-  //   // console.log(key, obj[key]);
-  
-  
-  // });
-  
 
 
   // Resizeabele DIVs =========================================================================================================
@@ -619,6 +518,7 @@ if(ele.style.backgroundColor= key){
   let previousY = null;
   
  useEffect(()=>{
+  // document.getElementById('menu')
  const div = document.getElementById(currentSelectedDiv)
   if(div.id !== 'body'){
     div.style.width = `${X}px`;
@@ -637,15 +537,7 @@ if(ele.style.backgroundColor= key){
 
     if (previousX !== null  && previousY !== null ) {
       
-      // if(xy === 'x'){
-      //   setX(x)
-      // }else if(xy === 'y'){
-      //   setY(Y)
-       
-      // }else if(xy === 'both'){
-      //   setX(X)
-      //   setY(Y)
-      // }
+   
       setX(x)
       setY(Y)
    
@@ -690,8 +582,30 @@ if(ele.style.backgroundColor= key){
   // Resizeabele DIVs =========================================================================================================
 
 
+const MobileView = ()=>{
+  const body = document.getElementById('body');
+  body.style.width = '390px';
+  body.style.height = '80vh';
+  body.style.border = '1px solid grey';
+  body.style.borderRadius = '25px';
 
 
+
+  
+  const backbody = document.getElementById('backbody');
+  backbody.style.display = 'flex'
+  backbody.style.justifyContent = 'center'
+  backbody.style.alignItems = 'center'
+
+
+
+
+
+}
+
+const ExportCode = ()=>{
+  
+}
 
   const tryFn = ()=>{
 
@@ -720,49 +634,16 @@ console.log(styles);
    
      <>
      <div style={{display:'flex'}}>
-        <div id='menu' style={{display:'flex', flexDirection:'column', gap:'',width:"30%", border:'1px solid grey',height:'100vh', overflowY:'scroll'}}>
+       
+        <div id='menu' style={{display:'flex', flexDirection:'column', gap:'',width:"20%", border:'1px solid grey',height:'100vh', overflowY:'scroll', position:'relative', overflowX:'hidden'}}>
+
+          <div style={{display:'flex',height:'5vh', width:'20%', backgroundColor:'#242424', position:'fixed', bottom:'0px', justifyContent:'center', gap:'20px', alignItems:'center'}}>
+            
+            <div style={{cursor:'pointer'}} onClick={MobileView}>Mobile View</div>
+            <div style={{cursor:'pointer'}} onClick={ExportCode}>Export Code</div>
+
+          </div>
         
-{/* <div>        
-         <button onClick={deleteDiv}>Delete DIV</button> </div>
-        
-<div></div>
-
-<button onClick={GetTheme}>Get Theme</button>
-<button onClick={ThemeChange}>Change Theme</button>
-
-
-<div style={{display:'flex', gap:'10px', alignItems:'center'}}> <span onClick={leftHorizontolly}>Left</span>  <span onClick={CenterHorizontolly}>Center</span> <span onClick={RightHorizontolly}>right</span></div>
- 
-
-<div>Height :  <input type="range" min="0" max="100"  className="slider" onChange={heightChange} /></div>
-<div>Width :  <input type="range" min="0" max="100"  className="slider" onChange={widthChange} />
-</div>
-
-<div>Padding :  <input type="range" min="0" max="100"  className="slider" onChange={paddingHandle} /></div>
-
-
-<div>Gap :  <input type="range" min="0" max="100"  className="slider" onChange={Gap} /></div>
-
- <div style={{display:'flex', gap:'10px', alignItems:'center'}}> <span onClick={Top}>Top</span>  <span onClick={Middle}>Middle</span> <span onClick={Bottom}>Bottom</span></div>
-
-
-<div>Font Size :  <input type="range" min="0" max="100"  className="slider" onChange={fontSize} />
-</div>
-
- <button onClick={changeFontFamily}>Change Font</button>
-
-
-
-
-<button onClick={hide}>Hide</button>
-
-
-
-
-<div>Opacity :  <input type="range" min="0" max="100"  className="slider" onChange={Opacity} /></div>
-<button onClick={downloadChangedCSS}>Download Code</button>
-<button onClick={tryFn}>get CSS of an ELement</button>
-</div>  */}
 
 <div style={{height:'20px', background:'linear-gradient(124deg, #5b10b4, rgba(215,38,61,1) 100%)', display:'flex', justifyContent:'center', alignItems:'center', padding:'10px', color:'white', opacity:'80%'}}>ReDesign</div>
 <div  style={{display:'flex', gap:'10px', alignItems:'center', justifyContent:'space-around', backgroundColor:'#131313', padding:'10px'}}>
@@ -793,18 +674,22 @@ console.log(styles);
       
         </div>
 
-      
-        <div className='clickable-div' onClick={SelectDiv} id='body' style={{height:window.innerHeight, color:'#f2f2f2', overflowY:'scroll', overflowX:'hidden',backgroundColor:'#242424', width:'100%'}}>
-
-          {/* <div className='non_selectables' style={{width:'100%', height:'24vh', display:'flex', justifyContent:'center', alignItems:'center'}}>
-
-          <div className='non_selectables' >Add Element</div>
-
-          </div> */}
 
       
-      
-        </div>
+       <div id='backbody' style={{width:'80%',height:window.innerHeight, color:'#f2f2f2', overflowY:'scroll', overflowX:'hidden',backgroundColor:'#242424' }}>
+
+       <div className='clickable-div' onClick={SelectDiv} id='body' style={{height:window.innerHeight, color:'#f2f2f2', overflowY:'scroll', overflowX:'hidden',backgroundColor:'#242424', width:'100%'}}>
+
+{/* <div className='non_selectables' style={{width:'100%', height:'24vh', display:'flex', justifyContent:'center', alignItems:'center'}}>
+
+<div className='non_selectables' >Add Element</div>
+
+</div> */}
+
+
+</div>
+
+       </div>
 
 
      </div>
