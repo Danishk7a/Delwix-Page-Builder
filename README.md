@@ -1,8 +1,7 @@
-# React + Vite
+# Web Builder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Website builder that allows users to create websites using a drag-and-drop interface, requiring no coding knowledge. It features customizable styling options for the website, and users can integrate and manipulate 3D models directly within the platform. The tool is designed to be intuitive, making it accessible to individuals without technical expertise, while still offering flexibility for customization and advanced interactions with 3D elements.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+https://github.com/user-attachments/assets/8a35354d-4827-463f-9c59-14bc39383d31
+
